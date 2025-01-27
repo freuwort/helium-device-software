@@ -1,10 +1,12 @@
-import { app, BrowserWindow, globalShortcut } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron'
 import path from 'path'
+// @ts-ignore
 import started from 'electron-squirrel-startup'
-import { AppConfigStore } from './stores/AppConfigStore'
-import { AppSecretStore } from './stores/AppSecretStore'
+// @ts-ignore
+import { appConfig } from './stores/AppConfig'
 import { getDeviceInfo } from './utils/system'
 import args from './utils/args'
+import axios from 'axios'
 
 
 
@@ -28,7 +30,7 @@ const createWindow = () => {
         autoHideMenuBar: !args.devMode,
         minimizable: args.devMode,
         title: 'Helium Device Software',
-        icon: path.join(__dirname, 'assets/icon.png'),
+        icon: path.join(__dirname, 'assets/images/icon.png'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
         },
@@ -41,25 +43,44 @@ const createWindow = () => {
     else {
         mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`))
     }
-
-    // Open the DevTools.
+    
     if (args.devMode) {
         mainWindow.webContents.openDevTools()
     }
-
+    
     mainWindow.setMenuBarVisibility(false)
     mainWindow.maximize()
-
-    mainWindow.webContents.on('did-finish-load', () => {
-        mainWindow.webContents.send('sendDeviceInfo', getDeviceInfo())
-        mainWindow.webContents.send('sendAppConfig', AppConfigStore.store)
-    })
 
     // Prevent the window from being closed
     mainWindow.on('close', (event) => {
         if (!args.devMode) {
             event.preventDefault()
         }
+    })
+
+    ipcMain.on('activate-device', (event, request) => {
+        axios.patch(request.url+'/api/devices/activate', {
+            pin: request.pin,
+            type: request.type,
+            name: request.name || getDeviceInfo().hostname,
+            os_platform: getDeviceInfo().osPlatform,
+            os_arch: getDeviceInfo().osArch,
+            os_release: getDeviceInfo().osRelease,
+            app_version: getDeviceInfo().appVersion,
+        })
+        .then((response) => {
+            console.log(response.data)
+            
+            appConfig.set({
+                apiUrl: request.url,
+                deviceId: response.data.id,
+                deviceToken: response.data.token,
+                firstTimeSetup: false,
+            })
+        })
+        .catch((error) => {
+            console.error(error)
+        })
     })
 }
 

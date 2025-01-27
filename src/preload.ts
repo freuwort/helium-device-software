@@ -9,5 +9,11 @@ contextBridge.exposeInMainWorld("bridge", {
     },
     sendAppConfig(appConfig: any) {
         return ipcRenderer.on('sendAppConfig', appConfig)
-    }
+    },
+})
+
+contextBridge.exposeInMainWorld('electronAPI', {
+    activateDevice(request: any) {
+        ipcRenderer.send('activate-device', request)
+    },
 })

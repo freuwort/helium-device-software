@@ -4,9 +4,9 @@ import { app } from 'electron'
 export function getDeviceInfo() {
     return {
         hostname: os.hostname(),
-        arch: os.arch(),
-        os: os.platform(),
-        osVersion: os.release(),
+        osPlatform: os.platform(),
+        osArch: os.arch(),
+        osRelease: os.release(),
 
         appVersion: app.getVersion(),
         
