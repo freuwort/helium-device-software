@@ -1,0 +1,47 @@
+{
+  "name": "helium-device-software",
+  "productName": "helium-device-software",
+  "version": "1.0.0",
+  "description": "The first party software to drive digital signage via Helium",
+  "main": ".vite/build/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "start dev": "electron-forge start -- dev-mode",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "eslint --ext .ts,.tsx ."
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^7.6.0",
+    "@electron-forge/maker-deb": "^7.6.0",
+    "@electron-forge/maker-rpm": "^7.6.0",
+    "@electron-forge/maker-squirrel": "^7.6.0",
+    "@electron-forge/maker-zip": "^7.6.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.6.0",
+    "@electron-forge/plugin-fuses": "^7.6.0",
+    "@electron-forge/plugin-vite": "^7.6.0",
+    "@electron/fuses": "^1.8.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "electron": "34.0.1",
+    "eslint": "^8.57.1",
+    "eslint-plugin-import": "^2.31.0",
+    "sass-embedded": "^1.83.4",
+    "ts-node": "^10.9.2",
+    "typescript": "~4.5.4",
+    "vite": "^5.4.14"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Alyx",
+    "email": "33777960+freuwoert@users.noreply.github.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1",
+    "electron-store": "^10.0.0",
+    "vue": "^3.5.13"
+  }
+}
